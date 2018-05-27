@@ -132,6 +132,41 @@ public class Tests {
     }
 
     @Test
+    public void checkSearchResultsTest(){
+
+        String searchText = "java";
+
+        waitForElementAndClick(By.id("org.wikipedia:id/search_container"),
+                "Cannot find 'Search Wikipedia' input",
+                5
+        );
+
+        waitForElementAndSendKeys(By.xpath("//*[contains(@text, 'Search…')]"),
+                searchText,
+                "Cannot find search input",
+                15);
+
+
+        List<WebElement> articles = waitForElementsPresent(By.id("org.wikipedia:id/page_list_item_container"),
+                "Results weren't found", 15);
+
+        boolean allResultsContainsText = true;
+        for (WebElement article : articles){
+            String title = article.findElement(By.id("org.wikipedia:id/page_list_item_title")).getText();
+            List<WebElement> descriptionElements = article.findElements(By.id("org.wikipedia:id/page_list_item_description"));
+            String description = descriptionElements.size()>0 ? descriptionElements.iterator().next().getText() : "";
+
+            if (!(title.toLowerCase().contains(searchText.toLowerCase()) ||
+                    description.toLowerCase().contains(searchText.toLowerCase()))){
+                allResultsContainsText = false;
+            }
+        }
+
+        Assert.assertTrue("Not all results contain search text '"+ searchText +"'", allResultsContainsText);
+
+    }
+
+    @Test
     public void compareArticleTitle(){
 
         waitForElementAndClick(By.xpath("//*[contains(@text, 'Search Wikipedia')]"),
