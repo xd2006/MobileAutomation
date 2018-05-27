@@ -55,6 +55,26 @@ public class Tests {
     }
 
     @Test
+    public void checkSearchInputTest()
+    {
+        waitForElementAndClick(By.xpath("//*[contains(@text, 'Search Wikipedia')]"),
+                "Cannot find 'Search Wikipedia' input",
+                15);
+
+        WebElement search_input_element = waitForElementPresent(By.id("org.wikipedia:id/search_src_text"),
+                "Cannot find article title",
+                15);
+
+        String input_text = search_input_element.getText();
+
+        Assert.assertEquals("'Search…' wasn't found","Search…",input_text);
+
+
+
+    }
+
+
+    @Test
     public void cancelSearchTest(){
 
      waitForElementAndClick(By.id("org.wikipedia:id/search_container"),
