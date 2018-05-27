@@ -11,6 +11,7 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.net.URL;
+import java.util.List;
 
 public class Tests {
 
@@ -69,8 +70,6 @@ public class Tests {
 
         Assert.assertEquals("'Search…' wasn't found","Search…",input_text);
 
-
-
     }
 
 
@@ -100,6 +99,36 @@ public class Tests {
                 "X is still present on the page",
                 5
                 );
+    }
+
+    @Test
+    public void cancelSearchAfterFindTest(){
+
+        waitForElementAndClick(By.id("org.wikipedia:id/search_container"),
+                "Cannot find 'Search Wikipedia' input",
+                5
+        );
+
+        waitForElementAndSendKeys(By.xpath("//*[contains(@text, 'Search…')]"),
+                "Java",
+                "Cannot find search input",
+                15);
+
+
+        List<WebElement> articles = waitForElementsPresent(By.id("org.wikipedia:id/page_list_item_container"),
+                "Results weren't found", 15);
+
+        Assert.assertTrue("Less than 2 articles were found", articles.size() > 1);
+
+        waitForElementAndClick(By.id("org.wikipedia:id/search_close_btn"),
+                "Cannot find X to cancel search",
+                5
+        );
+
+        waitForElementNotPresent(By.id("org.wikipedia:id/page_list_item_container"),
+                "Results are still present on the page",
+                5
+        );
     }
 
     @Test
@@ -136,6 +165,12 @@ public class Tests {
         return wait.until(ExpectedConditions.presenceOfElementLocated(by));
     }
 
+    private List<WebElement> waitForElementsPresent(By by, String error_message, long timeoutInSeconds){
+        WebDriverWait wait = new WebDriverWait(driver, timeoutInSeconds);
+        wait.withMessage(error_message + "\n");
+        return wait.until(ExpectedConditions.presenceOfAllElementsLocatedBy((by)));
+    }
+
     private WebElement waitForElementPresent(By by, String error_message){
         return waitForElementPresent(by, error_message, 10);
     }
@@ -159,6 +194,7 @@ public class Tests {
         wait.withMessage(error_message + "\n");
         return wait.until(ExpectedConditions.invisibilityOfElementLocated(by));
     }
+
 
     private WebElement waitForElementAndClear(By by, String error_message, long timeoutInSeconds){
         WebElement element = waitForElementPresent(by, error_message, timeoutInSeconds);
