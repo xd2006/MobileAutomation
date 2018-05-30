@@ -149,6 +149,7 @@ public class Tests {
                 "Results weren't found", 15);
 
        String errorMessage="";
+       Integer i = 1;
         for (WebElement article : articles) {
             String title = article.findElement(By.id("org.wikipedia:id/page_list_item_title")).getText();
             WebElement descriptionElement = waitForNestedElementPresent(article,
@@ -157,8 +158,9 @@ public class Tests {
 
             if (!(title.toLowerCase().contains(searchText.toLowerCase()) ||
                     description.toLowerCase().contains(searchText.toLowerCase()))) {
-                errorMessage += String.format("Title: '%s' \n", title );
+                errorMessage += String.format("%d. '%s' \n", i, title );
             }
+            i++;
         }
 
         Assert.assertEquals(String.format("Not all results contain search text '%s'. Invalid results are: \n%s",
