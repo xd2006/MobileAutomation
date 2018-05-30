@@ -5,6 +5,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -18,8 +19,7 @@ public class Tests {
     private AppiumDriver driver;
 
     @Before
-    public void setUp() throws Exception
-    {
+    public void setUp() throws Exception {
         DesiredCapabilities capabilities = new DesiredCapabilities();
         capabilities.setCapability("platformName", "Android");
         capabilities.setCapability("deviceName", "AndroidTestDevice");
@@ -31,15 +31,14 @@ public class Tests {
 
         driver = new AndroidDriver(new URL("http://127.0.0.1:4723/wd/hub"), capabilities);
     }
+
     @After
-    public void tearDown()
-    {
+    public void tearDown() {
         driver.quit();
     }
 
     @Test
-    public void searchTest()
-    {
+    public void searchTest() {
         waitForElementAndClick(By.xpath("//*[contains(@text, 'Search Wikipedia')]"),
                 "Cannot find 'Search Wikipedia' input",
                 15);
@@ -56,8 +55,7 @@ public class Tests {
     }
 
     @Test
-    public void checkSearchInputTest()
-    {
+    public void checkSearchInputTest() {
         waitForElementAndClick(By.xpath("//*[contains(@text, 'Search Wikipedia')]"),
                 "Cannot find 'Search Wikipedia' input",
                 15);
@@ -68,15 +66,15 @@ public class Tests {
 
         String input_text = search_input_element.getText();
 
-        Assert.assertEquals("'Search…' wasn't found","Search…",input_text);
+        Assert.assertEquals("'Search…' wasn't found", "Search…", input_text);
 
     }
 
 
     @Test
-    public void cancelSearchTest(){
+    public void cancelSearchTest() {
 
-     waitForElementAndClick(By.id("org.wikipedia:id/search_container"),
+        waitForElementAndClick(By.id("org.wikipedia:id/search_container"),
                 "Cannot find 'Search Wikipedia' input",
                 5
         );
@@ -98,11 +96,11 @@ public class Tests {
         waitForElementNotPresent(By.id("org.wikipedia:id/search_close_btn"),
                 "X is still present on the page",
                 5
-                );
+        );
     }
 
     @Test
-    public void cancelSearchAfterFindTest(){
+    public void cancelSearchAfterFindTest() {
 
         waitForElementAndClick(By.id("org.wikipedia:id/search_container"),
                 "Cannot find 'Search Wikipedia' input",
@@ -132,7 +130,7 @@ public class Tests {
     }
 
     @Test
-    public void checkSearchResultsTest(){
+    public void checkSearchResultsTest() {
 
         String searchText = "java";
 
@@ -150,24 +148,27 @@ public class Tests {
         List<WebElement> articles = waitForElementsPresent(By.id("org.wikipedia:id/page_list_item_container"),
                 "Results weren't found", 15);
 
-        boolean allResultsContainsText = true;
-        for (WebElement article : articles){
+       String errorMessage="";
+        for (WebElement article : articles) {
             String title = article.findElement(By.id("org.wikipedia:id/page_list_item_title")).getText();
-            List<WebElement> descriptionElements = article.findElements(By.id("org.wikipedia:id/page_list_item_description"));
-            String description = descriptionElements.size()>0 ? descriptionElements.iterator().next().getText() : "";
+            WebElement descriptionElement = waitForNestedElementPresent(article,
+                    By.id("org.wikipedia:id/page_list_item_description"), 1);
+            String description = descriptionElement == null ? "" : descriptionElement.getText();
 
             if (!(title.toLowerCase().contains(searchText.toLowerCase()) ||
-                    description.toLowerCase().contains(searchText.toLowerCase()))){
-                allResultsContainsText = false;
+                    description.toLowerCase().contains(searchText.toLowerCase()))) {
+                errorMessage += String.format("Title: '%s' \n", title );
             }
         }
 
-        Assert.assertTrue("Not all results contain search text '"+ searchText +"'", allResultsContainsText);
+        Assert.assertEquals(String.format("Not all results contain search text '%s'. Invalid results are: \n%s",
+                searchText, errorMessage),
+                "", errorMessage);
 
     }
 
     @Test
-    public void compareArticleTitle(){
+    public void compareArticleTitle() {
 
         waitForElementAndClick(By.xpath("//*[contains(@text, 'Search Wikipedia')]"),
                 "Cannot find 'Search Wikipedia' input",
@@ -194,36 +195,36 @@ public class Tests {
 
     }
 
-    private WebElement waitForElementPresent(By by, String error_message, long timeoutInSeconds){
+    private WebElement waitForElementPresent(By by, String error_message, long timeoutInSeconds) {
         WebDriverWait wait = new WebDriverWait(driver, timeoutInSeconds);
         wait.withMessage(error_message + "\n");
         return wait.until(ExpectedConditions.presenceOfElementLocated(by));
     }
 
-    private List<WebElement> waitForElementsPresent(By by, String error_message, long timeoutInSeconds){
+    private List<WebElement> waitForElementsPresent(By by, String error_message, long timeoutInSeconds) {
         WebDriverWait wait = new WebDriverWait(driver, timeoutInSeconds);
         wait.withMessage(error_message + "\n");
         return wait.until(ExpectedConditions.presenceOfAllElementsLocatedBy((by)));
     }
 
-    private WebElement waitForElementPresent(By by, String error_message){
+    private WebElement waitForElementPresent(By by, String error_message) {
         return waitForElementPresent(by, error_message, 10);
     }
 
-    private WebElement waitForElementAndSendKeys(By by, String value, String error_message, long timeoutInSeconds){
+    private WebElement waitForElementAndSendKeys(By by, String value, String error_message, long timeoutInSeconds) {
         WebElement element = waitForElementPresent(by, error_message, timeoutInSeconds);
         element.sendKeys(value);
         return element;
     }
 
-    private WebElement waitForElementAndClick(By by, String error_message, long timeoutInSeconds){
+    private WebElement waitForElementAndClick(By by, String error_message, long timeoutInSeconds) {
         WebElement element = waitForElementPresent(by, error_message, timeoutInSeconds);
         element.click();
         return element;
     }
 
 
-    private boolean waitForElementNotPresent(By by, String error_message, long timeoutInSeconds){
+    private boolean waitForElementNotPresent(By by, String error_message, long timeoutInSeconds) {
 
         WebDriverWait wait = new WebDriverWait(driver, timeoutInSeconds);
         wait.withMessage(error_message + "\n");
@@ -231,10 +232,18 @@ public class Tests {
     }
 
 
-    private WebElement waitForElementAndClear(By by, String error_message, long timeoutInSeconds){
+    private WebElement waitForElementAndClear(By by, String error_message, long timeoutInSeconds) {
         WebElement element = waitForElementPresent(by, error_message, timeoutInSeconds);
         element.clear();
         return element;
     }
 
+    private WebElement waitForNestedElementPresent(WebElement element, By by, long timeoutInSeconds) {
+        WebDriverWait wait = new WebDriverWait(driver, timeoutInSeconds);
+        try {
+            return wait.until(ExpectedConditions.presenceOfNestedElementLocatedBy(element, by));
+        } catch (WebDriverException e) {
+            return null;
+        }
+    }
 }
