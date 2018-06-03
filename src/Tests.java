@@ -294,6 +294,30 @@ public class Tests extends TestsTemplate {
     assertElementNotPresent(By.xpath(search_result_locator), "We've found some results by request " + search_line );
     }
 
+    @Test
+    public void testCheckSearchArticleInBackground(){
+
+        waitForElementAndClick(By.xpath("//*[contains(@text, 'Search Wikipedia')]"),
+                "Cannot find 'Search Wikipedia' input",
+                15);
+
+        waitForElementAndSendKeys(By.xpath("//*[contains(@text, 'Search…')]"),
+                "Java",
+                "Cannot find search input",
+                15);
+
+        waitForElementPresent(By.xpath("//*[@resource-id='org.wikipedia:id/page_list_item_container']//*[@text='Object-oriented programming language']"),
+                "Cannot find result article",
+                15);
+
+        driver.runAppInBackground(2);
+
+        waitForElementPresent(By.xpath("//*[@resource-id='org.wikipedia:id/page_list_item_container']//*[@text='Object-oriented programming language']"),
+                "Cannot find result article after returning from background",
+                15);
+
+    }
+
 
 
 }
