@@ -1,10 +1,12 @@
 import io.appium.java_client.AppiumDriver;
+import io.appium.java_client.TouchAction;
 import io.appium.java_client.android.AndroidDriver;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.openqa.selenium.By;
+import org.openqa.selenium.Dimension;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.remote.DesiredCapabilities;
@@ -28,6 +30,7 @@ public class Tests {
         capabilities.setCapability("app.Package", "org.wikipedia");
         capabilities.setCapability("app.Activity", ".main.MainActivity");
         capabilities.setCapability("app", "C:\\Sources\\MobileAutomation\\apks\\org.wikipedia.apk");
+//        capabilities.setCapability("orientation", "PORTRAIT");
 
         driver = new AndroidDriver(new URL("http://127.0.0.1:4723/wd/hub"), capabilities);
     }
@@ -197,6 +200,34 @@ public class Tests {
 
     }
 
+    @Test
+    public void swipeArticleTest() {
+
+        waitForElementAndClick(By.xpath("//*[contains(@text, 'Search Wikipedia')]"),
+                "Cannot find 'Search Wikipedia' input",
+                15);
+
+        waitForElementAndSendKeys(By.xpath("//*[contains(@text, 'Search…')]"),
+                "Java",
+                "Cannot find search input",
+                15);
+
+        waitForElementAndClick(By.xpath("//*[@resource-id='org.wikipedia:id/page_list_item_container']//*[@text='Object-oriented programming language']"),
+                "Cannot find 'Search Wikipedia' input",
+                15);
+
+        WebElement title_element = waitForElementPresent(By.id("org.wikipedia:id/view_page_title_text"),
+                "Cannot find article title",
+                15);
+
+        swipeUp(2000);
+        swipeUp(2000);
+        swipeUp(2000);
+        swipeUp(2000);
+
+
+    }
+
     private WebElement waitForElementPresent(By by, String error_message, long timeoutInSeconds) {
         WebDriverWait wait = new WebDriverWait(driver, timeoutInSeconds);
         wait.withMessage(error_message + "\n");
@@ -247,5 +278,17 @@ public class Tests {
         } catch (WebDriverException e) {
             return null;
         }
+    }
+
+    protected void swipeUp(int timeOfSwipe){
+
+        Dimension size = driver.manage().window().getSize();
+        int x = size.width / 2;
+        int start_y = (int) (size.height * 0.8);
+        int end_y = (int) (size.height * 0.2);
+
+        TouchAction action = new TouchAction(driver);
+        action.press(x, start_y).waitAction(timeOfSwipe).moveTo(x, end_y).release().perform();
+
     }
 }
