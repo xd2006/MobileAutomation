@@ -318,6 +318,31 @@ public class Tests extends TestsTemplate {
 
     }
 
+    @Test
+    public void checkArticleTitleTest(){
+
+        String searchText = "java";
+
+        waitForElementAndClick(By.id("org.wikipedia:id/search_container"),
+                "Cannot find 'Search Wikipedia' input",
+                5
+        );
+
+        waitForElementAndSendKeys(By.xpath("//*[contains(@text, 'Search…')]"),
+                searchText,
+                "Cannot find search input",
+                15);
+
+
+        waitForElementAndClick(By.id("org.wikipedia:id/page_list_item_container"),
+                "Result article wasn't found", 15);
+
+        waitForElementPresent(By.id("org.wikipedia:id/page_header_view"), "Article wasn't loaded", 15);
+
+        assertElementPresent(By.id("org.wikipedia:id/view_page_title_text"), "Title of the article wasn't found");
+    }
+
+
 
 
 }
