@@ -140,7 +140,7 @@ public abstract class TestsTemplate {
         TouchAction action = new TouchAction(driver);
         action.
                 press(right_x, middle_y).
-                waitAction(150).
+                waitAction(300).
                 moveTo(left_x, middle_y).
                 release().perform();
 
