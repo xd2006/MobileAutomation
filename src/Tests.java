@@ -208,11 +208,11 @@ public class Tests {
                 15);
 
         waitForElementAndSendKeys(By.xpath("//*[contains(@text, 'Search…')]"),
-                "Java",
+                "Appium",
                 "Cannot find search input",
                 15);
 
-        waitForElementAndClick(By.xpath("//*[@resource-id='org.wikipedia:id/page_list_item_container']//*[@text='Object-oriented programming language']"),
+        waitForElementAndClick(By.xpath("//*[@resource-id='org.wikipedia:id/page_list_item_title'][@text='Appium']"),
                 "Cannot find 'Search Wikipedia' input",
                 15);
 
@@ -220,10 +220,8 @@ public class Tests {
                 "Cannot find article title",
                 15);
 
-        swipeUp(2000);
-        swipeUp(2000);
-        swipeUp(2000);
-        swipeUp(2000);
+        swipeUpToElement(By.xpath("//*[@text='View page in browser']"), "Cannot find the end of the article",
+                20);
 
 
     }
@@ -289,6 +287,25 @@ public class Tests {
 
         TouchAction action = new TouchAction(driver);
         action.press(x, start_y).waitAction(timeOfSwipe).moveTo(x, end_y).release().perform();
+
+    }
+
+    protected void swipeUpQuick(){
+        swipeUp(200);
+    }
+
+    protected void swipeUpToElement(By by, String error_message, int max_swipes){
+
+        int already_swiped = 0;
+        while (driver.findElements(by).size() == 0){
+            if (already_swiped>max_swipes){
+                waitForElementPresent(by,
+                        "Cannot find element by swiping. \n" + error_message,0);
+                return;
+            }
+           swipeUpQuick();
+           ++already_swiped;
+        }
 
     }
 }
