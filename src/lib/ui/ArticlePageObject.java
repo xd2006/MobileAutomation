@@ -17,9 +17,15 @@ public class ArticlePageObject extends MainPageObject {
     ADD_TO_MY_LIST_OVERLAY = "org.wikipedia:id/onboarding_button",
     MY_LIST_NAME_INPUT = "org.wikipedia:id/text_input",
     MY_LIST_OK_BUTTON = "//*[@text='OK']",
-    CLOSE_ARTICLE_BUTTON = "//android.widget.ImageButton[@content-desc='Navigate up']";
+    MY_LIST_FOLDER_NAME_TPL = "//*[@text='{FOLDER_NAME}']",
+    CLOSE_ARTICLE_BUTTON = "//android.widget.ImageButton[@content-desc='Navigate up']",
+    HEADER_ELEMENT = "org.wikipedia:id/page_header_view";
 
 
+
+private String getMyListFolderNameXpath(String folder_name){
+    return MY_LIST_FOLDER_NAME_TPL.replace("{FOLDER_NAME}", folder_name);
+    }
 
 
     public WebElement waitForTitleElement(){
@@ -36,13 +42,9 @@ public class ArticlePageObject extends MainPageObject {
         this.swipeUpToElement(By.xpath(FOOTER_ELEMENT), "Cannot find the end of the article", 20 );
     }
 
-    public void addArticleToMyList(String name_of_folder){
+    public void addArticleToMyListNewFolder(String name_of_folder){
 
-        waitForElementAndClick(By.xpath(OPTIONS_BUTTON),
-                "Cannot find button to open article options", 5);
-
-        waitForElementAndClick(By.xpath(ADD_TO_MY_LIST_BUTTON),
-                "Cannot find option to add article to reading list", 5);
+        goToOptionsAddToMyList();
 
         waitForElementAndClick(By.id(ADD_TO_MY_LIST_OVERLAY),
                 "Cannot find 'Got it' tip overlay", 5);
@@ -58,8 +60,37 @@ public class ArticlePageObject extends MainPageObject {
 
     }
 
+    public void addArticleToMyListToExistingFolder(String name_of_folder) {
+
+        goToOptionsAddToMyList();
+
+        waitForElementAndClick(By.xpath(getMyListFolderNameXpath(name_of_folder)),
+                String.format("Can't find reading list %s", name_of_folder), 10);
+
+    }
+
+
     public void closeArticle(){
         waitForElementAndClick(By.xpath(CLOSE_ARTICLE_BUTTON),
                 "Cannot close article, cannot find X line", 5);
     }
+
+    public void waitForArticleLoaded() {
+        waitForElementPresent(By.id(HEADER_ELEMENT), "Article wasn't loaded", 15);
+    }
+
+    public void assertTitlePresent() {
+        assertElementPresent(By.id(TITLE), "Title of the article wasn't found");
+
+    }
+
+    private void goToOptionsAddToMyList(){
+        waitForElementAndClick(By.xpath(OPTIONS_BUTTON),
+                "Cannot find button to open article options", 15);
+
+        waitForElementAndClick(By.xpath(ADD_TO_MY_LIST_BUTTON),
+                "Cannot find option to add article to reading list", 15);
+    }
+
+
 }

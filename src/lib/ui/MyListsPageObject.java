@@ -48,4 +48,9 @@ public class MyListsPageObject extends MainPageObject {
                 "Cannot find saved article with title " + article_title, 15);
     }
 
+    public void clickOnArticle(String article_name) {
+
+        waitForElementAndClick(By.xpath(getSavedArticleXpathByTitle(article_name)),
+                "Cannot open saved article " + article_name, 10);
+    }
 }

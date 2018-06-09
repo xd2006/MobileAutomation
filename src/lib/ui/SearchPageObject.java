@@ -5,6 +5,7 @@ import javafx.util.Pair;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class SearchPageObject extends MainPageObject{
@@ -18,6 +19,8 @@ public class SearchPageObject extends MainPageObject{
             SEARCH_EMPTY_RESULT_ELEMENT = "//*[@text='No results found']",
             SEARCH_RESULT_ELEMENT_TITLE = "org.wikipedia:id/page_list_item_title",
             SEARCH_RESULT_ELEMENT_DESCRIPTION = "org.wikipedia:id/page_list_item_description";
+
+
 
 
     public SearchPageObject(AppiumDriver driver) {
@@ -118,5 +121,23 @@ public class SearchPageObject extends MainPageObject{
         Pair<Boolean, String> result = new Pair<>(valid, errorMessage);
 
         return result;
+    }
+
+    public void clickOnFirstResult() {
+        waitForElementAndClick(By.xpath(SEARCH_RESULT_ELEMENT),
+                "Result article wasn't found", 15);
+    }
+
+    public List<String> getResultsTitles(int numberOfresults) {
+
+        List<WebElement> articles = waitForElementsPresent(By.xpath(SEARCH_RESULT_ELEMENT),
+                "Results weren't found", 15);
+
+        List<String> titles = new ArrayList<>();
+
+        for (int i = 0; i < numberOfresults; i++) {
+            titles.add(articles.get(i).findElement(By.id(SEARCH_RESULT_ELEMENT_TITLE)).getText());
+        }
+        return titles;
     }
 }
