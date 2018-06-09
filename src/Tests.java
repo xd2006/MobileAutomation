@@ -1,6 +1,5 @@
 import lib.CoreTestCase;
 import lib.ui.*;
-import org.junit.Assert;
 import org.junit.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
@@ -20,18 +19,6 @@ public class Tests extends CoreTestCase {
     }
 
     @Test
-    public void testSearch() {
-
-        SearchPageObject searchPageObject = new SearchPageObject(driver);
-
-        searchPageObject.initSearchInput();
-        searchPageObject.typeSearchLine("Java");
-        searchPageObject.waitForSearchresult("Object-oriented programming language");
-
-    }
-
-
-    @Test
     public void testCheckSearchInput() {
         MainPageObject.waitForElementAndClick(By.xpath("//*[contains(@text, 'Search Wikipedia')]"),
                 "Cannot find 'Search Wikipedia' input",
@@ -43,22 +30,11 @@ public class Tests extends CoreTestCase {
 
         String input_text = search_input_element.getText();
 
-        Assert.assertEquals("'Search…' wasn't found", "Search…", input_text);
+        assertEquals("'Search…' wasn't found", "Search…", input_text);
 
     }
 
 
-    @Test
-    public void testCancelSearch() {
-
-        SearchPageObject searchPageObject = new SearchPageObject(driver);
-
-        searchPageObject.initSearchInput();
-        searchPageObject.waitForCancelButtonToAppear();
-        searchPageObject.clickCancelSearch();
-        searchPageObject.waitForCancelButtonToDisappear();
-
-    }
 
     @Test
     public void testCancelSearchAfterFind() {
@@ -77,7 +53,7 @@ public class Tests extends CoreTestCase {
         List<WebElement> articles = MainPageObject.waitForElementsPresent(By.id("org.wikipedia:id/page_list_item_container"),
                 "Results weren't found", 15);
 
-        Assert.assertTrue("Less than 2 articles were found", articles.size() > 1);
+        assertTrue("Less than 2 articles were found", articles.size() > 1);
 
         MainPageObject.waitForElementAndClick(By.id("org.wikipedia:id/search_close_btn"),
                 "Cannot find X to cancel search",
@@ -124,117 +100,9 @@ public class Tests extends CoreTestCase {
             i++;
         }
 
-        Assert.assertEquals(String.format("Not all results contain search text '%s'. Invalid results are: \n%s",
+        assertEquals(String.format("Not all results contain search text '%s'. Invalid results are: \n%s",
                 searchText, errorMessage),
                 "", errorMessage);
-
-    }
-
-    @Test
-    public void testCompareArticleTitle() {
-
-        SearchPageObject searchPageObject = new SearchPageObject(driver);
-
-        searchPageObject.initSearchInput();
-        searchPageObject.typeSearchLine("Java");
-        searchPageObject.waitForCancelButtonToAppear();
-        searchPageObject.clickByArticleWithSubstring("Object-oriented programming language");
-
-        ArticlePageObject articlePageObject = new ArticlePageObject(driver);
-
-        String title = articlePageObject.getArticleTitle();
-
-        Assert.assertEquals("We see unexpected title",
-                "Java (programming language)",
-                title);
-
-    }
-
-    @Test
-    public void testSwipeArticle() {
-
-        SearchPageObject searchPageObject = new SearchPageObject(driver);
-
-        searchPageObject.initSearchInput();
-        searchPageObject.typeSearchLine("Appium");
-        searchPageObject.waitForCancelButtonToAppear();
-        searchPageObject.clickByArticleWithSubstring("Appium");
-
-        ArticlePageObject articlePageObject = new ArticlePageObject(driver);
-
-        articlePageObject.waitForTitleElement();
-        articlePageObject.swipeToFooter();
-
-    }
-
-    @Test
-    public void testSaveFirstArticleToMyList(){
-
-        SearchPageObject searchPageObject = new SearchPageObject(driver);
-
-        searchPageObject.initSearchInput();
-        searchPageObject.typeSearchLine("Java");
-        searchPageObject.clickByArticleWithSubstring("Object-oriented programming language");
-
-        ArticlePageObject articlePageObject = new ArticlePageObject(driver);
-
-        articlePageObject.waitForTitleElement();
-        String articleTitle = articlePageObject.getArticleTitle();
-
-        String name_of_folder = "Learning programming";
-
-        articlePageObject.addArticleToMyList(name_of_folder);
-        articlePageObject.closeArticle();
-
-        NavigationUi navigationUi = new NavigationUi(driver);
-        navigationUi.clickMyLists();
-
-        MyListsPageObject myListsPageObject = new MyListsPageObject(driver);
-
-        myListsPageObject.openFolderByName(name_of_folder);
-        myListsPageObject.swipeByArticleToDelete(articleTitle);
-
-    }
-
-    @Test
-    public void testAmountOfNonEmptySearch(){
-
-
-        String search_line = "Linkin Park Discography";
-        SearchPageObject searchPageObject = new SearchPageObject(driver);
-
-        searchPageObject.initSearchInput();
-        searchPageObject.typeSearchLine(search_line);
-
-        int amount_of_search_results = searchPageObject.getAmountOfFoundArticles();
-        Assert.assertTrue("We found too few results", amount_of_search_results > 0);
-    }
-
-    @Test
-    public void testAmountOfEmptySearch(){
-
-        String search_line = "asaljljejekl";
-        SearchPageObject searchPageObject = new SearchPageObject(driver);
-
-        searchPageObject.initSearchInput();
-        searchPageObject.typeSearchLine(search_line);
-        searchPageObject.waitForEmptyResultsLabel();
-        searchPageObject.assertThereIsNoResultOfSearch();
-
-    }
-
-    @Test
-    public void testCheckSearchArticleInBackground(){
-
-        SearchPageObject searchPageObject = new SearchPageObject(driver);
-
-        searchPageObject.initSearchInput();
-        searchPageObject.typeSearchLine("Java");
-        searchPageObject.waitForSearchresult("Object-oriented programming language");
-
-        backgrounApp(2);
-
-        searchPageObject.waitForSearchresult("Object-oriented programming language");
 
     }
 
@@ -364,7 +232,7 @@ public class Tests extends CoreTestCase {
         String title_of_remained_article = MainPageObject.waitForWebElementAndGetAttribute(By.id("org.wikipedia:id/view_page_title_text"), "text",
                 "Cannot find title of article", 15);
 
-        Assert.assertEquals(String.format("Wrong title of the article found. Should be '%s' but was found '%s'", titles.get(1), title_of_remained_article)
+        assertEquals(String.format("Wrong title of the article found. Should be '%s' but was found '%s'", titles.get(1), title_of_remained_article)
                 , titles.get(1), title_of_remained_article);
 
     }
