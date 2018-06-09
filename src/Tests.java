@@ -1,3 +1,4 @@
+import lib.CoreTestCase;
 import org.junit.Assert;
 import org.junit.Test;
 import org.openqa.selenium.By;
@@ -6,10 +7,10 @@ import org.openqa.selenium.WebElement;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Tests extends TestsTemplate {
+public class Tests extends CoreTestCase {
 
     @Test
-    public void searchTest() {
+    public void testSearch() {
         waitForElementAndClick(By.xpath("//*[contains(@text, 'Search Wikipedia')]"),
                 "Cannot find 'Search Wikipedia' input",
                 15);
@@ -27,7 +28,7 @@ public class Tests extends TestsTemplate {
 
 
     @Test
-    public void checkSearchInputTest() {
+    public void testCheckSearchInput() {
         waitForElementAndClick(By.xpath("//*[contains(@text, 'Search Wikipedia')]"),
                 "Cannot find 'Search Wikipedia' input",
                 15);
@@ -44,7 +45,7 @@ public class Tests extends TestsTemplate {
 
 
     @Test
-    public void cancelSearchTest() {
+    public void testCancelSearch() {
 
         waitForElementAndClick(By.id("org.wikipedia:id/search_container"),
                 "Cannot find 'Search Wikipedia' input",
@@ -72,7 +73,7 @@ public class Tests extends TestsTemplate {
     }
 
     @Test
-    public void cancelSearchAfterFindTest() {
+    public void testCancelSearchAfterFind() {
 
         waitForElementAndClick(By.id("org.wikipedia:id/search_container"),
                 "Cannot find 'Search Wikipedia' input",
@@ -102,7 +103,7 @@ public class Tests extends TestsTemplate {
     }
 
     @Test
-    public void checkSearchResultsTest() {
+    public void testCheckSearchResults() {
 
         String searchText = "java";
 
@@ -142,7 +143,7 @@ public class Tests extends TestsTemplate {
     }
 
     @Test
-    public void compareArticleTitle() {
+    public void testCompareArticleTitle() {
 
         waitForElementAndClick(By.xpath("//*[contains(@text, 'Search Wikipedia')]"),
                 "Cannot find 'Search Wikipedia' input",
@@ -170,7 +171,7 @@ public class Tests extends TestsTemplate {
     }
 
     @Test
-    public void swipeArticleTest() {
+    public void testSwipeArticle() {
 
         waitForElementAndClick(By.xpath("//*[contains(@text, 'Search Wikipedia')]"),
                 "Cannot find 'Search Wikipedia' input",
@@ -196,7 +197,7 @@ public class Tests extends TestsTemplate {
     }
 
     @Test
-    public void saveFirstArticleToMyList(){
+    public void testSaveFirstArticleToMyList(){
 
         waitForElementAndClick(By.xpath("//*[contains(@text, 'Search Wikipedia')]"),
                 "Cannot find 'Search Wikipedia' input",
@@ -431,7 +432,7 @@ public class Tests extends TestsTemplate {
                 "Cannot find navigation button to 'My lists'", 5);
 
         waitForElementAndClick(By.xpath("//*[@text='" + name_of_folder + "']"),
-                "Cannot find created folder", 15);
+                "Cannot find created folder", 30);
 
         swipeElementToLeft(By.xpath(String.format("//*[@text='%s']", titles.get(0))),
                 "Cannot find saved article with title" + titles.get(0) );

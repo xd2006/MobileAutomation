@@ -1,10 +1,11 @@
+import lib.CoreTestCase;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.ScreenOrientation;
 
-public class TestsRotation extends TestsTemplate {
+public class TestsRotation extends CoreTestCase {
 
     @After
     public void rotationTearDown() {
@@ -15,7 +16,7 @@ public class TestsRotation extends TestsTemplate {
 
 
     @Test
-    public void changeScreenOrientationOnResultsScreenTest(){
+    public void testChangeScreenOrientationOnResultsScreen(){
 
         waitForElementAndClick(By.xpath("//*[contains(@text, 'Search Wikipedia')]"),
                 "Cannot find 'Search Wikipedia' input",

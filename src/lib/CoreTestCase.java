@@ -1,8 +1,9 @@
+package lib;
+
 import io.appium.java_client.AppiumDriver;
 import io.appium.java_client.TouchAction;
 import io.appium.java_client.android.AndroidDriver;
-import org.junit.After;
-import org.junit.Before;
+import junit.framework.TestCase;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Dimension;
 import org.openqa.selenium.WebDriverException;
@@ -14,12 +15,16 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import java.net.URL;
 import java.util.List;
 
-public abstract class TestsTemplate {
+public abstract class CoreTestCase extends TestCase {
 
     protected AppiumDriver driver;
+    private static String AppiumUrl = "http://127.0.0.1:4723/wd/hub";
 
-    @Before
+    @Override
     public void setUp() throws Exception {
+
+        super.setUp();
+
         DesiredCapabilities capabilities = new DesiredCapabilities();
         capabilities.setCapability("platformName", "Android");
         capabilities.setCapability("deviceName", "AndroidTestDevice");
@@ -28,15 +33,17 @@ public abstract class TestsTemplate {
         capabilities.setCapability("app.Package", "org.wikipedia");
         capabilities.setCapability("app.Activity", ".main.MainActivity");
         capabilities.setCapability("app", "C:\\Sources\\MobileAutomation\\apks\\org.wikipedia.apk");
-//        capabilities.setCapability("orientation", "PORTRAIT");
 
 
-        driver = new AndroidDriver(new URL("http://127.0.0.1:4723/wd/hub"), capabilities);
+
+        driver = new AndroidDriver(new URL(AppiumUrl), capabilities);
     }
 
-    @After
-    public void tearDown() {
+
+    @Override
+    public void tearDown() throws Exception {
         driver.quit();
+        super.tearDown();
     }
 
 
