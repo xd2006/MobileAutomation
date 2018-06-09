@@ -1,5 +1,6 @@
 package tests;
 
+import javafx.util.Pair;
 import lib.CoreTestCase;
 import lib.ui.SearchPageObject;
 import org.junit.Test;
@@ -54,5 +55,52 @@ public class SearchTests extends CoreTestCase {
         searchPageObject.waitForEmptyResultsLabel();
         searchPageObject.assertThereIsNoResultOfSearch();
 
+    }
+
+    @Test
+    public void testCheckSearchInput() {
+
+        String expectedText = "Search…";
+        SearchPageObject searchPageObject = new SearchPageObject(driver);
+
+        searchPageObject.initSearchInput();
+        String input_text = searchPageObject.getSearchInputText();
+
+        assertEquals(String.format("%s wasn't found", expectedText), expectedText, input_text);
+
+    }
+
+    @Test
+    public void testCancelSearchAfterFind() {
+
+        SearchPageObject searchPageObject = new SearchPageObject(driver);
+
+        searchPageObject.initSearchInput();
+        searchPageObject.typeSearchLine("Java");
+
+        int articles = searchPageObject.getAmountOfFoundArticles();
+
+        assertTrue("Less than 2 articles were found", articles > 1);
+
+        searchPageObject.clickCancelSearch();
+
+        searchPageObject.assertThereIsNoResultOfSearch();
+
+    }
+
+    @Test
+    public void testCheckSearchResults() {
+
+        String searchText = "java";
+
+        SearchPageObject searchPageObject = new SearchPageObject(driver);
+
+        searchPageObject.initSearchInput();
+        searchPageObject.typeSearchLine(searchText);
+        Pair<Boolean, String> result = searchPageObject.assertThatAllResultsAreValidForSearchRequest(searchText);
+
+        assertTrue(String.format("Not all results contain search text '%s'. Invalid results are: \n%s",
+                searchText, result.getValue()),
+                result.getKey());
     }
 }
