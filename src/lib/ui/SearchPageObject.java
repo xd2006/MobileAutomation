@@ -9,7 +9,9 @@ public class SearchPageObject extends MainPageObject{
             SEARCH_INIT_ELEMENT = "//*[contains(@text, 'Search Wikipedia')]",
             SEARCH_INPUT = "//*[contains(@text, 'Search…')]",
             SEARCH_CANCEL_BUTTON = "org.wikipedia:id/search_close_btn",
-            SEARCH_RESULT_BY_SYBSTRING_TPL = "//*[@resource-id='org.wikipedia:id/page_list_item_container']//*[@text='{SUBSTRING}']";
+            SEARCH_RESULT_BY_SYBSTRING_TPL = "//*[@resource-id='org.wikipedia:id/page_list_item_container']//*[@text='{SUBSTRING}']",
+            SEARCH_RESULT_ELEMENT = "//*[@resource-id='org.wikipedia:id/search_results_list']/*[@resource-id='org.wikipedia:id/page_list_item_container']",
+            SEARCH_EMPTY_RESULT_ELEMENT = "//*[@text='No results found']";
 
     public SearchPageObject(AppiumDriver driver) {
         super(driver);
@@ -53,6 +55,23 @@ public class SearchPageObject extends MainPageObject{
     public void clickByArticleWithSubstring(String substring){
         this.waitForElementAndClick(By.xpath(getResultSearchelement(substring)), "Cannot find and click search result with substring " + substring,
                 15);
+    }
+
+    public int getAmountOfFoundArticles(){
+        String search_result_locator = SEARCH_RESULT_ELEMENT;
+        waitForElementPresent(By.xpath(search_result_locator), "Cannot find anything by request", 15);
+        return getAmountOfElements(By.xpath(SEARCH_INIT_ELEMENT));
+    }
+
+    public void waitForEmptyResultsLabel(){
+
+        String empty_result_label = SEARCH_EMPTY_RESULT_ELEMENT;
+
+        waitForElementPresent(By.xpath(empty_result_label), "Cannot find empty results label", 15);
+    }
+
+    public void assertThereIsNoResultOfSearch(){
+        assertElementNotPresent(By.xpath(SEARCH_RESULT_ELEMENT), "We've found some results but supposed not to");
     }
 
 
