@@ -5,6 +5,9 @@ import lib.CoreTestCase;
 import lib.ui.SearchPageObject;
 import org.junit.Test;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class SearchTests extends CoreTestCase {
 
     @Test
@@ -14,7 +17,7 @@ public class SearchTests extends CoreTestCase {
 
         searchPageObject.initSearchInput();
         searchPageObject.typeSearchLine("Java");
-        searchPageObject.waitForSearchresult("Object-oriented programming language");
+        searchPageObject.waitForSearchResult("Object-oriented programming language");
 
     }
 
@@ -102,5 +105,24 @@ public class SearchTests extends CoreTestCase {
         assertTrue(String.format("Not all results contain search text '%s'. Invalid results are: \n%s",
                 searchText, result.getValue()),
                 result.getKey());
+    }
+
+    @Test
+    public void testCheckSearchResultsByTitleAndDescription() {
+
+        String searchText = "java";
+        Map<String, String> expectedResults = new HashMap<>();
+        expectedResults.put("Java", "Island of Indonesia");
+        expectedResults.put("Java (programming language)", "Object-oriented programming language");
+        expectedResults.put("JavaScript", "Programming language");
+
+        SearchPageObject searchPageObject = new SearchPageObject(driver);
+
+        searchPageObject.initSearchInput();
+        searchPageObject.typeSearchLine(searchText);
+
+        expectedResults.forEach((k, v) -> searchPageObject.waitForElementByTitleAndDescription(k, v));
+
+
     }
 }
