@@ -59,7 +59,7 @@ public class ArticlePageObject extends MainPageObject {
     }
 
     public void closeArticle(){
-        waitForElementAndClick(By.xpath("//android.widget.ImageButton[@content-desc='Navigate up']"),
+        waitForElementAndClick(By.xpath(CLOSE_ARTICLE_BUTTON),
                 "Cannot close article, cannot find X line", 5);
     }
 }

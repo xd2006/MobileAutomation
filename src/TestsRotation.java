@@ -1,9 +1,9 @@
 import lib.CoreTestCase;
+import lib.ui.ArticlePageObject;
 import lib.ui.MainPageObject;
+import lib.ui.SearchPageObject;
 import org.junit.Assert;
 import org.junit.Test;
-import org.openqa.selenium.By;
-import org.openqa.selenium.ScreenOrientation;
 
 public class TestsRotation extends CoreTestCase {
 
@@ -20,7 +20,7 @@ public class TestsRotation extends CoreTestCase {
     @Override
     public void tearDown() throws Exception {
 
-        driver.rotate(ScreenOrientation.PORTRAIT);
+        rotateScreenPortrait();
         super.tearDown();
     }
 
@@ -28,35 +28,25 @@ public class TestsRotation extends CoreTestCase {
     @Test
     public void testChangeScreenOrientationOnResultsScreen(){
 
-        MainPageObject.waitForElementAndClick(By.xpath("//*[contains(@text, 'Search Wikipedia')]"),
-                "Cannot find 'Search Wikipedia' input",
-                15);
+        SearchPageObject searchPageObject = new SearchPageObject(driver);
 
-        String search_line = "Java";
+        searchPageObject.initSearchInput();
+        searchPageObject.typeSearchLine("Java");
+        searchPageObject.waitForCancelButtonToAppear();
+        searchPageObject.clickByArticleWithSubstring("Object-oriented programming language");
 
-        MainPageObject.waitForElementAndSendKeys(By.xpath("//*[contains(@text, 'Search…')]"),
-                search_line,
-                "Cannot find search input",
-                15);
+        ArticlePageObject articlePageObject = new ArticlePageObject(driver);
+        String title_before_rotation = articlePageObject.getArticleTitle();
 
-        MainPageObject.waitForElementAndClick(By.xpath("//*[@resource-id='org.wikipedia:id/page_list_item_container']//*[@text='Object-oriented programming language']"),
-                "Cannot find 'Object-oriented programming language' topic searching by " + search_line,
-                15);
+        rotateScreenLandscape();
 
-        String title_before_rotation = MainPageObject.waitForWebElementAndGetAttribute(By.id("org.wikipedia:id/view_page_title_text"), "text",
-                "Cannot find title of article", 15);
-
-        driver.rotate(ScreenOrientation.LANDSCAPE);
-
-        String title_after_rotation = MainPageObject.waitForWebElementAndGetAttribute(By.id("org.wikipedia:id/view_page_title_text"), "text",
-                "Cannot find title of article", 15);
+        String title_after_rotation = articlePageObject.getArticleTitle();
 
         Assert.assertEquals("Article title has been changed after screen rotation", title_before_rotation, title_after_rotation);
 
-        driver.rotate(ScreenOrientation.PORTRAIT);
+        rotateScreenPortrait();
 
-        String title_after_second_rotation = MainPageObject.waitForWebElementAndGetAttribute(By.id("org.wikipedia:id/view_page_title_text"), "text",
-                "Cannot find title of article", 15);
+        String title_after_second_rotation = articlePageObject.getArticleTitle();
 
         Assert.assertEquals("Article title has been changed after screen rotation", title_before_rotation, title_after_second_rotation);
 

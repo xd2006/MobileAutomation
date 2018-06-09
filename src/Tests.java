@@ -226,29 +226,20 @@ public class Tests extends CoreTestCase {
     @Test
     public void testCheckSearchArticleInBackground(){
 
-        MainPageObject.waitForElementAndClick(By.xpath("//*[contains(@text, 'Search Wikipedia')]"),
-                "Cannot find 'Search Wikipedia' input",
-                15);
+        SearchPageObject searchPageObject = new SearchPageObject(driver);
 
-        MainPageObject.waitForElementAndSendKeys(By.xpath("//*[contains(@text, 'Search…')]"),
-                "Java",
-                "Cannot find search input",
-                15);
+        searchPageObject.initSearchInput();
+        searchPageObject.typeSearchLine("Java");
+        searchPageObject.waitForSearchresult("Object-oriented programming language");
 
-        MainPageObject.waitForElementPresent(By.xpath("//*[@resource-id='org.wikipedia:id/page_list_item_container']//*[@text='Object-oriented programming language']"),
-                "Cannot find result article",
-                15);
+        backgrounApp(2);
 
-        driver.runAppInBackground(2);
-
-        MainPageObject.waitForElementPresent(By.xpath("//*[@resource-id='org.wikipedia:id/page_list_item_container']//*[@text='Object-oriented programming language']"),
-                "Cannot find result article after returning from background",
-                15);
+        searchPageObject.waitForSearchresult("Object-oriented programming language");
 
     }
 
     @Test
-    public void checkArticleTitleTest(){
+    public void testCheckArticleTitle(){
 
         String searchText = "java";
 
@@ -272,7 +263,7 @@ public class Tests extends CoreTestCase {
     }
 
     @Test
-    public void articlesFolderingTest() {
+    public void testArticlesFoldering() {
 
         String search_line = "Java";
 
