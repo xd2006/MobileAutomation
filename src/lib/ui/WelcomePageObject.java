@@ -10,7 +10,7 @@ public class WelcomePageObject extends MainPageObject {
 
     private static final String
     STEP_LEARN_MORE_LINK = "Learn more about Wikipedia",
-    STEP_NEW_WAYS_TO_EXPLORE_TEXT = "New way to explore",
+    STEP_NEW_WAYS_TO_EXPLORE_TEXT = "New ways to explore",
     STEP_ADD_OR_EDIT_PREFERRED_LANG_LINK = "Add or edit preferred languages",
     STEP_LEARN_MORE_ABOUT_DATA_COLLECTED_LINK = "Learn more about data collected",
     NEXT_LINK = "Next",
@@ -23,9 +23,9 @@ public class WelcomePageObject extends MainPageObject {
                 "Cannot find 'Learn more about Wikipedia' link",10);
     }
 
-    public void waitForNewWayToExploreText(){
+    public void waitForNewWaysToExploreText(){
         waitForElementPresent(By.id(STEP_NEW_WAYS_TO_EXPLORE_TEXT),
-                "Cannot find 'New way to explore' link",10);
+                "Cannot find 'New ways to explore' link",10);
     }
 
     public void waitForAddOrEditPreferredLangText(){

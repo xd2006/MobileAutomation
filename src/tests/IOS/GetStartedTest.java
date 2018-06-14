@@ -14,7 +14,7 @@ public class GetStartedTest extends iOSTestCase {
         WelcomePage.waitForLearnMoreLink();
         WelcomePage.clickNextButton();
 
-        WelcomePage.waitForNewWayToExploreText();
+        WelcomePage.waitForNewWaysToExploreText();
         WelcomePage.clickNextButton();
 
         WelcomePage.waitForAddOrEditPreferredLangText();
