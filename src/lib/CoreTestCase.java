@@ -11,7 +11,8 @@ import java.net.URL;
 public abstract class CoreTestCase extends TestCase {
 
     protected AppiumDriver driver;
-    private static String AppiumUrl = "http://127.0.0.1:4723/wd/hub";
+//    private static String AppiumUrl = "http://127.0.0.1:4723/wd/hub";
+   private static String AppiumUrl = "http://EPBYMINW6539.minsk.epam.com:4723/wd/hub";
 
     @Override
     protected void setUp() throws Exception {
@@ -25,7 +26,8 @@ public abstract class CoreTestCase extends TestCase {
         capabilities.setCapability("automationName", "Appium");
         capabilities.setCapability("app.Package", "org.wikipedia");
         capabilities.setCapability("app.Activity", ".main.MainActivity");
-        capabilities.setCapability("app", "C:\\Sources\\MobileAutomation\\apks\\org.wikipedia.apk");
+//        capabilities.setCapability("app", "C:\\Sources\\MobileAutomation\\apks\\org.wikipedia.apk");
+        capabilities.setCapability("app", "C:\\Sources\\Study\\MobileAutomation\\apks\\org.wikipedia.apk");
 
 
 
