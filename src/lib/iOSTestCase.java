@@ -12,7 +12,7 @@ public abstract class iOSTestCase extends TestCase {
 
     protected AppiumDriver driver;
 //    private static String AppiumUrl = "http://127.0.0.1:4723/wd/hub";
-   private static String AppiumUrl = "http://10.6.113.11:4723/wd/hub";
+   private static String AppiumUrl = "http://10.6.113.26:4723/wd/hub";
 
     @Override
     protected void setUp() throws Exception {
