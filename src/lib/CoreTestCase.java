@@ -12,12 +12,17 @@ public abstract class CoreTestCase extends TestCase {
 
     protected AppiumDriver driver;
 
+
+
     @Override
     protected void setUp() throws Exception {
 
         super.setUp();
         driver = Platform.getInstance().getDriver();
-        skipWelcomePageForIOSApp();
+
+        if (!getName().equals("testPassThroughWelcome")) {
+            skipWelcomePageForIOSApp();
+        }
     }
 
 
