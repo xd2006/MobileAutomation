@@ -3,6 +3,7 @@ package tests;
 import lib.CoreTestCase;
 import lib.ui.ArticlePageObject;
 import lib.ui.SearchPageObject;
+import lib.ui.factories.ArticlePageObjectFactory;
 import lib.ui.factories.SearchPageObjectFactory;
 import org.junit.Test;
 
@@ -19,7 +20,7 @@ public class ArticleTests extends CoreTestCase {
         searchPageObject.waitForCancelButtonToAppear();
         searchPageObject.clickByArticleWithSubstring("Object-oriented programming language");
 
-        ArticlePageObject articlePageObject = new ArticlePageObject(driver);
+        ArticlePageObject articlePageObject = ArticlePageObjectFactory.get(driver);
 
         String title = articlePageObject.getArticleTitle();
 
@@ -35,11 +36,11 @@ public class ArticleTests extends CoreTestCase {
         SearchPageObject searchPageObject = SearchPageObjectFactory.get(driver);
 
         searchPageObject.initSearchInput();
-        searchPageObject.typeSearchLine("Appium");
+        searchPageObject.typeSearchLine("Java");
         searchPageObject.waitForCancelButtonToAppear();
-        searchPageObject.clickByArticleWithSubstring("Appium");
+        searchPageObject.clickByArticleWithSubstring("Object-oriented programming language");
 
-        ArticlePageObject articlePageObject = new ArticlePageObject(driver);
+        ArticlePageObject articlePageObject = ArticlePageObjectFactory.get(driver);
 
         articlePageObject.waitForTitleElement();
         articlePageObject.swipeToFooter();
@@ -58,7 +59,7 @@ public class ArticleTests extends CoreTestCase {
         searchPageObject.typeSearchLine(searchText);
         searchPageObject.clickOnFirstResult();
 
-        ArticlePageObject articlePageObject = new ArticlePageObject(driver);
+        ArticlePageObject articlePageObject = ArticlePageObjectFactory.get(driver);
 
         articlePageObject.waitForArticleLoaded();
         articlePageObject.assertTitlePresent();

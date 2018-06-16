@@ -1,24 +1,25 @@
 package lib.ui;
 
 import io.appium.java_client.AppiumDriver;
+import lib.Platform;
 import org.openqa.selenium.WebElement;
 
-public class ArticlePageObject extends MainPageObject {
+public abstract class ArticlePageObject extends MainPageObject {
     public ArticlePageObject(AppiumDriver driver) {
         super(driver);
     }
 
-    private static final String
-    TITLE = "id:org.wikipedia:id/view_page_title_text",
-    FOOTER_ELEMENT = "xpath://*[@text='View page in browser']",
-    OPTIONS_BUTTON = "xpath://android.widget.ImageView[@content-desc='More options']",
-    ADD_TO_MY_LIST_BUTTON = "xpath://*[@text='Add to reading list']",
-    ADD_TO_MY_LIST_OVERLAY = "id:org.wikipedia:id/onboarding_button",
-    MY_LIST_NAME_INPUT = "id:org.wikipedia:id/text_input",
-    MY_LIST_OK_BUTTON = "xpath://*[@text='OK']",
-    MY_LIST_FOLDER_NAME_TPL = "xpath://*[@text='{FOLDER_NAME}']",
-    CLOSE_ARTICLE_BUTTON = "xpath://android.widget.ImageButton[@content-desc='Navigate up']",
-    HEADER_ELEMENT = "id:org.wikipedia:id/page_header_view";
+    protected static String
+    TITLE,
+    FOOTER_ELEMENT,
+    OPTIONS_BUTTON,
+    ADD_TO_MY_LIST_BUTTON,
+    ADD_TO_MY_LIST_OVERLAY,
+    MY_LIST_NAME_INPUT,
+    MY_LIST_OK_BUTTON,
+    MY_LIST_FOLDER_NAME_TPL,
+    CLOSE_ARTICLE_BUTTON,
+    HEADER_ELEMENT;
 
 
 
@@ -33,12 +34,21 @@ private String getMyListFolderNameXpath(String folder_name){
     }
 
     public String getArticleTitle(){
-        return waitForTitleElement().getText();
+    if (Platform.getInstance().isAndroid() )
+    {    return waitForTitleElement().getText();}
+    else{
+         return waitForTitleElement().getAttribute("name");
+    }
     }
 
     public void swipeToFooter(){
 
-        this.swipeUpToElement(FOOTER_ELEMENT, "Cannot find the end of the article", 20 );
+    if (Platform.getInstance().isAndroid()) {
+        this.swipeUpToElement(FOOTER_ELEMENT, "Cannot find the end of the article", 50);
+    }
+    else {
+        swipeUpTillElementAppear(FOOTER_ELEMENT,"Cannot find the end of the article", 50 );
+    }
     }
 
     public void addArticleToMyListNewFolder(String name_of_folder){
