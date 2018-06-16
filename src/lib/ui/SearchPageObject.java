@@ -19,7 +19,7 @@ public abstract class SearchPageObject extends MainPageObject{
             SEARCH_EMPTY_RESULT_ELEMENT,
             SEARCH_RESULT_ELEMENT_TITLE,
             SEARCH_RESULT_ELEMENT_DESCRIPTION,
-            SEARCH_RESULT_BY_TITLE_AND_DESCRIPTION;
+            SEARCH_RESULT_BY_TITLE_AND_DESCRIPTION_TPL;
 
     public SearchPageObject(AppiumDriver driver) {
         super(driver);
@@ -32,7 +32,7 @@ public abstract class SearchPageObject extends MainPageObject{
     }
 
     private static String getResultSearchElementByTitleAndDescription(String title, String description){
-        return SEARCH_RESULT_BY_TITLE_AND_DESCRIPTION.replace("{TITLE}", title).replace("{DESCRIPTION}", description);
+        return SEARCH_RESULT_BY_TITLE_AND_DESCRIPTION_TPL.replace("{TITLE}", title).replace("{DESCRIPTION}", description);
     }
 
     /* Template methods */
@@ -67,12 +67,6 @@ public abstract class SearchPageObject extends MainPageObject{
     }
 
     public void clickByArticleWithSubstring(String substring) {
-//        if (Platform.getInstance().isIOS()) {
-//
-//            if (substring.contains("/n")) {
-//                substring = substring.split("/n")[1];
-//            }
-//        }
             this.waitForElementAndClick(getResultSearchElementXpath(substring),
                     "Cannot find and click search result with substring " + substring,
                     15);
