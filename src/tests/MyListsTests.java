@@ -68,7 +68,8 @@ public class MyListsTests extends CoreTestCase {
 
         List<String> titles = searchPageObject.getResultsTitles(2);
 
-        searchPageObject.clickByArticleWithSubstring(titles.get(0));
+         searchPageObject.clickByArticleWithSubstring(titles.get(0));
+
 
         ArticlePageObject articlePageObject = ArticlePageObjectFactory.get(driver);
 
@@ -83,9 +84,12 @@ public class MyListsTests extends CoreTestCase {
         articlePageObject.closeArticle();
 
         searchPageObject.initSearchInput();
-        searchPageObject.typeSearchLine(search_line);
 
+        if (Platform.getInstance().isAndroid()) {
+            searchPageObject.typeSearchLine(search_line);
+        }
         searchPageObject.clickByArticleWithSubstring(titles.get(1));
+
         articlePageObject.waitForArticleLoaded();
 
         if (Platform.getInstance().isAndroid()) {
@@ -111,16 +115,21 @@ public class MyListsTests extends CoreTestCase {
 
         myListsPageObject.swipeByArticleToDelete(titles.get(0));
 
-
-        myListsPageObject.waitArticleToDisappearByTitle(titles.get(0));
-
         myListsPageObject.clickOnArticle(titles.get(1));
 
-        articlePageObject.waitForArticleLoaded();
-        String title_of_remained_article = articlePageObject.getArticleTitle();
 
-        assertEquals(String.format("Wrong title of the article found. Should be '%s' but was found '%s'", titles.get(1), title_of_remained_article)
-                , titles.get(1), title_of_remained_article);
+        articlePageObject.waitForArticleLoaded();
+
+        if (Platform.getInstance().isAndroid()) {
+            String title_of_remained_article = articlePageObject.getArticleTitle();
+
+            assertEquals(String.format("Wrong title of the article found. Should be '%s' but was found '%s'", titles.get(1), title_of_remained_article)
+                    , titles.get(1), title_of_remained_article);
+        }
+        else{
+            String title = titles.get(1).split("\n",2)[0];
+            articlePageObject.CheckTextDisplayedOnPage(title);
+        }
 
     }
 }

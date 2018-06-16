@@ -38,6 +38,7 @@ public abstract class MyListsPageObject extends MainPageObject {
     public void swipeByArticleToDelete(String article_title){
 
         waitArticleToAppearByTitle(article_title);
+
         String articleXpath = getSavedArticleXpathByTitle(article_title);
         swipeElementToLeft(articleXpath,
                 "Cannot find saved article");

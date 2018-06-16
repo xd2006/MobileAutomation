@@ -11,6 +11,7 @@ public class IOSArticlePageObject extends ArticlePageObject {
         ADD_TO_MY_LIST_BUTTON = "id:Save for later";
         MY_LIST_FOLDER_NAME_TPL = "xpath://*[@text='{FOLDER_NAME}']";
         CLOSE_ARTICLE_BUTTON = "id:Back";
+        TEXT_TPL = "id:{TEXT}";
     }
 
 

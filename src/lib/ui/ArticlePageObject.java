@@ -19,12 +19,17 @@ public abstract class ArticlePageObject extends MainPageObject {
     MY_LIST_OK_BUTTON,
     MY_LIST_FOLDER_NAME_TPL,
     CLOSE_ARTICLE_BUTTON,
-    HEADER_ELEMENT;
+    HEADER_ELEMENT,
+    TEXT_TPL;
 
 
 
 private String getMyListFolderNameXpath(String folder_name){
     return MY_LIST_FOLDER_NAME_TPL.replace("{FOLDER_NAME}", folder_name);
+    }
+
+    private String getElementWithTextXpath(String text){
+        return TEXT_TPL.replace("{TEXT}", text);
     }
 
 
@@ -89,7 +94,12 @@ private String getMyListFolderNameXpath(String folder_name){
     }
 
     public void waitForArticleLoaded() {
+    if (Platform.getInstance().isAndroid()) {
         waitForElementPresent(HEADER_ELEMENT, "Article wasn't loaded", 15);
+    } else{
+        waitForElementPresent(FOOTER_ELEMENT, "Article wasn't loaded", 15);
+
+    }
     }
 
     public void assertTitlePresent() {
@@ -106,4 +116,8 @@ private String getMyListFolderNameXpath(String folder_name){
     }
 
 
+    public void CheckTextDisplayedOnPage(String text) {
+
+    assertElementPresent(getElementWithTextXpath(text), "Cannot find element with text: "+text);
+    }
 }

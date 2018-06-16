@@ -16,6 +16,7 @@ public class AndroidArticlePageObject extends ArticlePageObject {
                  MY_LIST_FOLDER_NAME_TPL = "xpath://*[@text='{FOLDER_NAME}']";
                  CLOSE_ARTICLE_BUTTON = "xpath://android.widget.ImageButton[@content-desc='Navigate up']";
                  HEADER_ELEMENT = "id:org.wikipedia:id/page_header_view";
+                 TEXT_TPL = "xpath://*[@text='{TEXT}']";
      }
 
 

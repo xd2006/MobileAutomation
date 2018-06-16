@@ -2,6 +2,7 @@ package lib.ui;
 
 import io.appium.java_client.AppiumDriver;
 import javafx.util.Pair;
+import lib.Platform;
 import org.openqa.selenium.WebElement;
 
 import java.util.ArrayList;
@@ -65,9 +66,17 @@ public abstract class SearchPageObject extends MainPageObject{
                 15);
     }
 
-    public void clickByArticleWithSubstring(String substring){
-        this.waitForElementAndClick(getResultSearchElementXpath(substring), "Cannot find and click search result with substring " + substring,
-                15);
+    public void clickByArticleWithSubstring(String substring) {
+//        if (Platform.getInstance().isIOS()) {
+//
+//            if (substring.contains("/n")) {
+//                substring = substring.split("/n")[1];
+//            }
+//        }
+            this.waitForElementAndClick(getResultSearchElementXpath(substring),
+                    "Cannot find and click search result with substring " + substring,
+                    15);
+
     }
 
     public int getAmountOfFoundArticles(){
@@ -137,9 +146,16 @@ public abstract class SearchPageObject extends MainPageObject{
 
         List<String> titles = new ArrayList<>();
 
-        for (int i = 0; i < numberOfresults; i++) {
-            titles.add(articles.get(i).findElement(getLocatorByString(SEARCH_RESULT_ELEMENT_TITLE)).getText());
-        }
+
+            for (int i = 0; i < numberOfresults; i++) {
+                if (Platform.getInstance().isAndroid()) {
+                    titles.add(articles.get(i).findElement(getLocatorByString(SEARCH_RESULT_ELEMENT_TITLE)).getText());
+                }
+                else{
+                    titles.add(articles.get(i).getAttribute("name"));
+                }
+            }
+
         return titles;
     }
 

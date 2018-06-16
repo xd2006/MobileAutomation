@@ -60,6 +60,7 @@ public class MainPageObject {
 
     public WebElement waitForElementAndSendKeys(String locator, String value, String error_message, long timeoutInSeconds) {
         WebElement element = waitForElementPresent(locator, error_message, timeoutInSeconds);
+        element.clear();
         element.sendKeys(value);
         return element;
     }
@@ -166,7 +167,7 @@ public class MainPageObject {
                 }
                 else{
                 int offset_x = (-1 * element.getSize().getWidth());
-                action.moveTo(offset_x, 0);
+                action.moveTo(offset_x, middle_y);
 
                 }
                 action.release().perform();
