@@ -64,7 +64,7 @@ public class Platform {
         DesiredCapabilities capabilities = new DesiredCapabilities();
 
         capabilities.setCapability("platformName", "iOS");
-        capabilities.setCapability("deviceName", "iPhone 6");
+        capabilities.setCapability("deviceName", "iPhone SE");
         capabilities.setCapability("platformVersion", "11.2");
         capabilities.setCapability("app", "/Users/alex/Desktop/Wikipedia.app");
 

@@ -1,15 +1,17 @@
 package lib.ui;
 
 import io.appium.java_client.AppiumDriver;
+import lib.Platform;
 
-public class MyListsPageObject extends MainPageObject {
+public abstract class MyListsPageObject extends MainPageObject {
     public MyListsPageObject(AppiumDriver driver) {
         super(driver);
     }
 
-    public static final String
-    FOLDER_BY_NAME_TPL = "xpath://*[@resource-id='org.wikipedia:id/item_title' and @text='{FOLDER_NAME}']",
-    ARTICLE_BY_TITLE_TPL = "xpath://*[@text='{TITLE}']";
+    protected static String
+            SYNC_REQUEST_POPUP_CLOSE_BUTTON,
+            FOLDER_BY_NAME_TPL,
+            ARTICLE_BY_TITLE_TPL;
 
     private static String getFolderXpathByName(String name_of_folder){
 
@@ -21,6 +23,12 @@ public class MyListsPageObject extends MainPageObject {
         return ARTICLE_BY_TITLE_TPL.replace("{TITLE}", title);
     }
 
+    public void CloseSyncRequestPopup() {
+
+        waitForElementAndClick(SYNC_REQUEST_POPUP_CLOSE_BUTTON,
+                "Cannot find close button for sync request popup", 5);
+    }
+
     public void openFolderByName(String name_of_folder){
 
         waitForElementAndClick(getFolderXpathByName(name_of_folder),
@@ -30,8 +38,14 @@ public class MyListsPageObject extends MainPageObject {
     public void swipeByArticleToDelete(String article_title){
 
         waitArticleToAppearByTitle(article_title);
-        swipeElementToLeft(getSavedArticleXpathByTitle(article_title),
+        String articleXpath = getSavedArticleXpathByTitle(article_title);
+        swipeElementToLeft(articleXpath,
                 "Cannot find saved article");
+
+        if (Platform.getInstance().isIOS()){
+            clickElementToTheRightUpperCorner(articleXpath, "Cannot find save article ");
+        }
+
         waitArticleToDisappearByTitle(article_title);
     }
 

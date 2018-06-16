@@ -78,6 +78,10 @@ private String getMyListFolderNameXpath(String folder_name){
 
     }
 
+    public void addArticleToMySaved(){
+       waitForElementAndClick(ADD_TO_MY_LIST_BUTTON, "Cannot find option to add article to reading list", 5);
+    }
+
 
     public void closeArticle(){
         waitForElementAndClick(CLOSE_ARTICLE_BUTTON,

@@ -1,17 +1,22 @@
 package tests;
 
 import lib.CoreTestCase;
+import lib.Platform;
 import lib.ui.ArticlePageObject;
 import lib.ui.MyListsPageObject;
 import lib.ui.NavigationUi;
 import lib.ui.SearchPageObject;
 import lib.ui.factories.ArticlePageObjectFactory;
+import lib.ui.factories.MyListsPageObjectFactory;
+import lib.ui.factories.NavigationUiPageObjectFactory;
 import lib.ui.factories.SearchPageObjectFactory;
 import org.junit.Test;
 
 import java.util.List;
 
 public class MyListsTests extends CoreTestCase {
+
+    private static final String name_of_folder = "Learning programming";
 
     @Test
     public void testSaveFirstArticleToMyList(){
@@ -27,17 +32,26 @@ public class MyListsTests extends CoreTestCase {
         articlePageObject.waitForTitleElement();
         String articleTitle = articlePageObject.getArticleTitle();
 
-        String name_of_folder = "Learning programming";
+        if (Platform.getInstance().isAndroid()){
+            articlePageObject.addArticleToMyListNewFolder(name_of_folder);
+        } else{
+            articlePageObject.addArticleToMySaved();
+        }
 
-        articlePageObject.addArticleToMyListNewFolder(name_of_folder);
         articlePageObject.closeArticle();
 
-        NavigationUi navigationUi = new NavigationUi(driver);
+        NavigationUi navigationUi = NavigationUiPageObjectFactory.get(driver);
         navigationUi.clickMyLists();
 
-        MyListsPageObject myListsPageObject = new MyListsPageObject(driver);
+        MyListsPageObject myListsPageObject = MyListsPageObjectFactory.get(driver);
 
-        myListsPageObject.openFolderByName(name_of_folder);
+        if (Platform.getInstance().isAndroid()) {
+            myListsPageObject.openFolderByName(name_of_folder);
+        }
+        else {
+            myListsPageObject.CloseSyncRequestPopup();
+        }
+
         myListsPageObject.swipeByArticleToDelete(articleTitle);
 
     }
@@ -46,7 +60,6 @@ public class MyListsTests extends CoreTestCase {
     public void testArticlesFoldering() {
 
         String search_line = "Java";
-        String name_of_folder = "Learning programming";
 
         SearchPageObject searchPageObject = SearchPageObjectFactory.get(driver);
 
@@ -61,7 +74,12 @@ public class MyListsTests extends CoreTestCase {
 
         articlePageObject.waitForArticleLoaded();
 
-        articlePageObject.addArticleToMyListNewFolder(name_of_folder);
+        if (Platform.getInstance().isAndroid()) {
+            articlePageObject.addArticleToMyListNewFolder(name_of_folder);
+        } else {
+            articlePageObject.addArticleToMySaved();
+        }
+
         articlePageObject.closeArticle();
 
         searchPageObject.initSearchInput();
@@ -70,16 +88,27 @@ public class MyListsTests extends CoreTestCase {
         searchPageObject.clickByArticleWithSubstring(titles.get(1));
         articlePageObject.waitForArticleLoaded();
 
-        articlePageObject.addArticleToMyListToExistingFolder(name_of_folder);
+        if (Platform.getInstance().isAndroid()) {
+            articlePageObject.addArticleToMyListToExistingFolder(name_of_folder);
+        } else{
+            articlePageObject.addArticleToMySaved();
+        }
+
         articlePageObject.closeArticle();
 
 
-        NavigationUi navigationUi = new NavigationUi(driver);
+        NavigationUi navigationUi = NavigationUiPageObjectFactory.get(driver);
         navigationUi.clickMyLists();
 
-        MyListsPageObject myListsPageObject = new MyListsPageObject(driver);
+        MyListsPageObject myListsPageObject = MyListsPageObjectFactory.get(driver);
 
-        myListsPageObject.openFolderByName(name_of_folder);
+        if (Platform.getInstance().isAndroid()) {
+            myListsPageObject.openFolderByName(name_of_folder);
+        }
+        else {
+            myListsPageObject.CloseSyncRequestPopup();
+        }
+
         myListsPageObject.swipeByArticleToDelete(titles.get(0));
 
 
