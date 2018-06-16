@@ -12,6 +12,16 @@ public class Platform {
     private static final String PLATFORM_IOS = "ios";
     private static final String PLATFORM_ANDROID = "android";
 
+    private static Platform instance;
+    private Platform(){}
+
+    public static Platform getInstance(){
+        if (instance == null) {
+            instance = new Platform();
+        }
+        return instance;
+    }
+
     public AppiumDriver getDriver() throws Exception {
 
         URL url = getAppiumUrlByPlatformEnv();
@@ -54,7 +64,7 @@ public class Platform {
         DesiredCapabilities capabilities = new DesiredCapabilities();
 
         capabilities.setCapability("platformName", "iOS");
-        capabilities.setCapability("deviceName", "iPhone SE");
+        capabilities.setCapability("deviceName", "iPhone 6");
         capabilities.setCapability("platformVersion", "11.2");
         capabilities.setCapability("app", "/Users/alex/Desktop/Wikipedia.app");
 
