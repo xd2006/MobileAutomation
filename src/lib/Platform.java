@@ -91,7 +91,7 @@ public class Platform {
 
         } else if (platform.equals(PLATFORM_IOS))
         {
-            appiumUrl = "http://10.6.113.26:4723/wd/hub";;
+            appiumUrl = "http://10.6.113.4:4723/wd/hub";
         }
         else{
 

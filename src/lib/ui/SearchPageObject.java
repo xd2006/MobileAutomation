@@ -111,14 +111,22 @@ public abstract class SearchPageObject extends MainPageObject{
         String errorMessage="";
         Integer i = 1;
         for (WebElement article : articles) {
-            String title = article.findElement(getLocatorByString(SEARCH_RESULT_ELEMENT_TITLE)).getText();
-            WebElement descriptionElement = waitForNestedElementPresent(article,
-                    SEARCH_RESULT_ELEMENT_DESCRIPTION, 1);
-            String description = descriptionElement == null ? "" : descriptionElement.getText();
 
-            if (!(title.toLowerCase().contains(searchText.toLowerCase()) ||
-                    description.toLowerCase().contains(searchText.toLowerCase()))) {
-                errorMessage += String.format("%d. '%s' \n", i, title );
+            if (Platform.getInstance().isAndroid()) {
+                String title = article.findElement(getLocatorByString(SEARCH_RESULT_ELEMENT_TITLE)).getText();
+                WebElement descriptionElement = waitForNestedElementPresent(article,
+                        SEARCH_RESULT_ELEMENT_DESCRIPTION, 1);
+                String description = descriptionElement == null ? "" : descriptionElement.getText();
+
+                if (!(title.toLowerCase().contains(searchText.toLowerCase()) ||
+                        description.toLowerCase().contains(searchText.toLowerCase()))) {
+                    errorMessage += String.format("%d. '%s' \n", i, title);
+                }
+            } else {
+
+                if (!(article.getAttribute("name").toLowerCase().contains(searchText.toLowerCase()))) {
+                    errorMessage += String.format("%d. '%s' \n", i, (article.getAttribute("name")));
+                }
             }
             i++;
         }
